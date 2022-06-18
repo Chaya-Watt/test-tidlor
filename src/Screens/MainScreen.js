@@ -49,7 +49,9 @@ const MainScreen = () => {
       )}
       <View style={styles.positionCreateButton}>
         <Button
-          onPress={() => navigation.navigate('CreateScreen')}
+          onPress={() =>
+            navigation.navigate('CreateScreen', {name: 'เพิ่มสมาชิก'})
+          }
           text="เพิ่มสมาชิก"
         />
       </View>

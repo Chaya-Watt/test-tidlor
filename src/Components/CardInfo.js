@@ -23,12 +23,13 @@ const CardInfo = ({data, onPressDelete}) => {
       </View>
       <View style={styles.containerButton}>
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
             navigation.navigate('CreateScreen', {
               id: data.id,
               isEdit: true,
-            })
-          }>
+              name: 'แก้ไขสมาชิก',
+            });
+          }}>
           <Text>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onPressDelete(data.id)}>

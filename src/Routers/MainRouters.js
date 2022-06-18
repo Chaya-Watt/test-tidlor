@@ -30,8 +30,8 @@ const MainRouters = () => {
       <StackMain.Screen
         name="CreateScreen"
         component={CreateScreen}
-        options={{
-          title: 'เพิ่มสมาชิก',
+        options={({route}) => ({
+          title: route.params.name,
           headerLeft: () => (
             <Button
               onPress={() => navigation.goBack()}
@@ -39,7 +39,7 @@ const MainRouters = () => {
               color="#fff"
             />
           ),
-        }}
+        })}
       />
     </StackMain.Navigator>
   );
