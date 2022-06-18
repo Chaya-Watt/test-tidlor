@@ -9,7 +9,10 @@ const userReducer = (state = [], {type, payload}) => {
       return state.filter(item => item.id !== payload);
 
     case EDIT_USER:
-      return state;
+      return state.map(item => (item.id === payload.id ? payload : item));
+
+    case FETCH_USERS:
+      return payload;
 
     default:
       return state;

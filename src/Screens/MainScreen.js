@@ -1,29 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Button, CardInfo} from '../Components';
 import {COLORS, FONTS, KEY_LOCAL_STORAGE} from '../Constants';
-import {getData} from '../Helper';
-import {fetchUsers} from '../Redux/actions';
+import {getData, storeData} from '../Helper';
+import {fetchUsers, deleteUser} from '../Redux/actions';
 
 const MainScreen = () => {
   const navigation = useNavigation();
-  // const [listUser, setListUser] = useState([]);
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const listUser = useSelector(state => state.user);
 
-  // const fetchUserDataLocal = async () => {
-  //   const userLocal = await getData(KEY_LOCAL_STORAGE.USER);
-  //   console.log('userLocal', userLocal);
-  //   // dispatch(fetchUsers(userLocal));
-  //   setListUser(userLocal);
-  // };
+  const fetchUserDataLocal = async () => {
+    const userLocal = await getData(KEY_LOCAL_STORAGE.USER);
 
-  // useEffect(() => {
-  //   fetchUserDataLocal();
-  // }, []);
+    dispatch(fetchUsers(userLocal));
+  };
+
+  const handleDeleteUser = async id => {
+    await storeData(
+      KEY_LOCAL_STORAGE.USER,
+      listUser.filter(item => item.id !== id),
+    );
+
+    dispatch(deleteUser(id));
+  };
+
+  useEffect(() => {
+    fetchUserDataLocal();
+  }, [isFocused]);
 
   return (
     <View style={styles.containerMain}>
@@ -34,7 +42,9 @@ const MainScreen = () => {
           data={listUser}
           showsVerticalScrollIndicator={false}
           style={styles.styleFlatList}
-          renderItem={({item}) => <CardInfo data={item} />}
+          renderItem={({item}) => (
+            <CardInfo data={item} onPressDelete={handleDeleteUser} />
+          )}
         />
       )}
       <View style={styles.positionCreateButton}>

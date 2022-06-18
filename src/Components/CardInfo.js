@@ -1,26 +1,23 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
-import {deleteUser} from '../Redux/actions';
 import {COLORS, FONTS} from '../Constants';
 
-const CardInfo = ({data}) => {
-  const dispatch = useDispatch();
+const CardInfo = ({data, onPressDelete}) => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.containerCard}>
-      <View>
-        <Text style={styles.styleLabel}>
+      <View style={styles.containerDetail}>
+        <Text style={styles.styleLabel} numberOfLines={1}>
           ชื่อ: <Text style={styles.styleData}>{data.name}</Text>
         </Text>
-        <Text style={styles.styleLabel}>
+        <Text style={styles.styleLabel} numberOfLines={1}>
           รหัสบัตรประชาชน:{' '}
           <Text style={styles.styleData}>{data.citizenId}</Text>
         </Text>
-        <Text style={styles.styleLabel}>
+        <Text style={styles.styleLabel} numberOfLines={1}>
           เบอร์โทรศัพท์: <Text style={styles.styleData}>{data.phone}</Text>
         </Text>
       </View>
@@ -34,7 +31,7 @@ const CardInfo = ({data}) => {
           }>
           <Text>Edit</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => dispatch(deleteUser(data.id))}>
+        <TouchableOpacity onPress={() => onPressDelete(data.id)}>
           <Text>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -46,6 +43,7 @@ export default CardInfo;
 
 const styles = StyleSheet.create({
   containerCard: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 10,
@@ -76,7 +74,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
+  containerDetail: {
+    flex: 0.9,
+  },
+
   containerButton: {
+    flex: 0.1,
     justifyContent: 'space-between',
     padding: 5,
   },
