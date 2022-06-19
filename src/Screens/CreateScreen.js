@@ -11,9 +11,13 @@ import {COLORS, KEY_LOCAL_STORAGE} from '../Constants';
 import {formatCitizenId, formatPhone, storeData} from '../Helper';
 
 const CreateScreen = ({route}) => {
+  const id = route?.params?.id || null;
+  const isEdit = route?.params?.isEdit || false;
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const listUser = useSelector(state => state.user);
+
   const initialValue = {
     id: '',
     firstName: '',
@@ -27,11 +31,7 @@ const CreateScreen = ({route}) => {
     handleSubmit,
     formState: {errors},
     reset,
-    setValue,
   } = useForm(initialValue);
-
-  const id = route?.params?.id || null;
-  const isEdit = route?.params?.isEdit || false;
 
   const formInput = [
     {

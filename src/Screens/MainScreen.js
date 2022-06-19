@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import Modal from 'react-native-modal';
 
@@ -13,10 +13,12 @@ const MainScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const listUser = useSelector(state => state.user);
+
   const [modalDeleteInfo, setModalDeleteInfo] = useState({});
   const [isModalConfirmDelete, setIsModalConfirmDelete] = useState(false);
 
-  console.log('listUser', listUser);
+  console.log('listUser', listUser); // To see storage redux data
+
   const fetchUserDataLocal = async () => {
     const userLocal = await getData(KEY_LOCAL_STORAGE.USER);
 

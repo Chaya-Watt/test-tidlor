@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
 
 import {Button} from '../Components';
 import {COLORS, KEY_LOCAL_STORAGE} from '../Constants';
