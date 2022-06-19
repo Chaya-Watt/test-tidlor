@@ -1,7 +1,8 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
+import Modal from 'react-native-modal';
 
 import {Button, CardInfo} from '../Components';
 import {COLORS, FONTS, KEY_LOCAL_STORAGE} from '../Constants';
@@ -10,14 +11,24 @@ import {fetchUsers, deleteUser} from '../Redux/actions';
 
 const MainScreen = () => {
   const navigation = useNavigation();
-  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const listUser = useSelector(state => state.user);
+  const [modalDeleteInfo, setModalDeleteInfo] = useState({});
+  const [isModalConfirmDelete, setIsModalConfirmDelete] = useState(false);
 
+  console.log('listUser', listUser);
   const fetchUserDataLocal = async () => {
     const userLocal = await getData(KEY_LOCAL_STORAGE.USER);
 
     dispatch(fetchUsers(userLocal));
+  };
+
+  const handleShowModalDelete = id => {
+    setIsModalConfirmDelete(!isModalConfirmDelete);
+
+    const [userDelete] = listUser.filter(item => item.id === id);
+
+    setModalDeleteInfo(userDelete);
   };
 
   const handleDeleteUser = async id => {
@@ -27,11 +38,12 @@ const MainScreen = () => {
     );
 
     dispatch(deleteUser(id));
+    setIsModalConfirmDelete(false);
   };
 
   useEffect(() => {
     fetchUserDataLocal();
-  }, [isFocused]);
+  }, []);
 
   return (
     <View style={styles.containerMain}>
@@ -43,7 +55,7 @@ const MainScreen = () => {
           showsVerticalScrollIndicator={false}
           style={styles.styleFlatList}
           renderItem={({item}) => (
-            <CardInfo data={item} onPressDelete={handleDeleteUser} />
+            <CardInfo data={item} onPressDelete={handleShowModalDelete} />
           )}
         />
       )}
@@ -55,6 +67,33 @@ const MainScreen = () => {
           text="เพิ่มสมาชิก"
         />
       </View>
+      <Modal isVisible={isModalConfirmDelete}>
+        <View style={styles.containerModal}>
+          <View style={{alignItems: 'center'}}>
+            <Text style={styles.headerTitleModal}>ลบสมาชิก</Text>
+            <Text style={styles.detailModal}>ต้องการลบ</Text>
+            <Text style={styles.detailModal} numberOfLines={1}>
+              {modalDeleteInfo.name}
+            </Text>
+          </View>
+          <View style={styles.containerButtonModal}>
+            <Button
+              text="ไม่"
+              onPress={() => setIsModalConfirmDelete(false)}
+              customStyle={{width: 150, padding: 10}}
+            />
+            <Button
+              text="ใช่"
+              onPress={() => handleDeleteUser(modalDeleteInfo.id)}
+              customStyle={{
+                width: 150,
+                padding: 10,
+                backgroundColor: '#90EE90',
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -111,5 +150,35 @@ const styles = StyleSheet.create({
   positionCreateButton: {
     marginVertical: 20,
     alignSelf: 'center',
+  },
+
+  containerModal: {
+    backgroundColor: COLORS.WHITE,
+    padding: 20,
+    minHeight: 200,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderRadius: 15,
+  },
+
+  headerTitleModal: {
+    fontFamily: FONTS.MEDIUM,
+    fontSize: 18,
+    color: COLORS.DARK_BLUE,
+    marginBottom: 5,
+  },
+
+  detailModal: {
+    fontFamily: FONTS.REGULAR,
+    fontSize: 14,
+    color: COLORS.BLACK,
+    marginBottom: 5,
+  },
+
+  containerButtonModal: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
 });

@@ -1,8 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {COLORS, FONTS} from '../Constants';
+import {formatCitizenId, formatPhone} from '../Helper';
+import editIcon from '../../assets/icons/edit.png';
+import deleteIcon from '../../assets/icons/delete.png';
 
 const CardInfo = ({data, onPressDelete}) => {
   const navigation = useNavigation();
@@ -15,10 +18,13 @@ const CardInfo = ({data, onPressDelete}) => {
         </Text>
         <Text style={styles.styleLabel} numberOfLines={1}>
           รหัสบัตรประชาชน:{' '}
-          <Text style={styles.styleData}>{data.citizenId}</Text>
+          <Text style={styles.styleData}>
+            {formatCitizenId(data.citizenId)}
+          </Text>
         </Text>
         <Text style={styles.styleLabel} numberOfLines={1}>
-          เบอร์โทรศัพท์: <Text style={styles.styleData}>{data.phone}</Text>
+          เบอร์โทรศัพท์:{' '}
+          <Text style={styles.styleData}>{formatPhone(data.phone)}</Text>
         </Text>
       </View>
       <View style={styles.containerButton}>
@@ -30,10 +36,16 @@ const CardInfo = ({data, onPressDelete}) => {
               name: 'แก้ไขสมาชิก',
             });
           }}>
-          <Text>Edit</Text>
+          <Image
+            source={editIcon}
+            style={[styles.styleIcon, {tintColor: COLORS.DARK_BLUE}]}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onPressDelete(data.id)}>
-          <Text>Delete</Text>
+          <Image
+            source={deleteIcon}
+            style={[styles.styleIcon, {tintColor: COLORS.RED}]}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -83,5 +95,10 @@ const styles = StyleSheet.create({
     flex: 0.1,
     justifyContent: 'space-between',
     padding: 5,
+  },
+
+  styleIcon: {
+    width: 20,
+    height: 20,
   },
 });
