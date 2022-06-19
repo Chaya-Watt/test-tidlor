@@ -115,6 +115,13 @@ const CreateScreen = ({route}) => {
           value: /\d{1}-\d{4}-\d{5}-\d{2}-\d{1}/,
           message: 'กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง',
         },
+        validate: value =>
+          value
+            .replace(/-/g, '')
+            .split('')
+            .every(char => char === value[0])
+            ? 'กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง'
+            : true,
         maxLength: 17,
       };
     } else if (item.key === 'phone') {
@@ -124,6 +131,13 @@ const CreateScreen = ({route}) => {
           value: /\d{3}-\d{7}/,
           message: 'กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง',
         },
+        validate: value =>
+          value
+            .replace(/-/g, '')
+            .split('')
+            .every(char => char === value[0])
+            ? 'กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง'
+            : true,
         maxLength: 11,
       };
     } else {
